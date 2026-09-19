@@ -1,12 +1,12 @@
 ---
 name: zocomputer-jev
-description: Use TypeSafe AI Jev through Vercel AI Gateway to decide situationally whether a request needs a direct answer, script inspection, a new script, or an authorized script run. Use when script choice or execution should be evidence-based rather than automatic.
+description: Use TypeSafe AI Jev through Vercel AI Gateway to outsource bounded, typed situational judgments about routing, triage, retries, risk, verification, and tool, script, or subagent selection while Zo retains implementation, authorization, and verification.
 compatibility: Created for Zo Computer; requires Bun and an AI_GATEWAY_API_KEY secret.
 metadata:
   author: etok.zo.computer
 ---
 
-# Situational script work with Jev
+# Situational decision delegation with Jev
 
 ## What Jev is good at
 
@@ -22,19 +22,37 @@ Jev is not a general-purpose coding model, a filesystem inspector, an execution 
 
 ## Why this skill exists
 
-Zo often needs to choose the right level of automation before touching files: answer directly, inspect an existing script, write a new script, or run an authorized one. This skill makes that choice explicit and repeatable, uses Jev for typed situational evidence, and keeps the final safety and authorization decision local to Zo.
+Jev makes a distinct kind of delegation available to Zo. Many problems contain a bounded judgment that does not require a full child agent or a general-purpose coding model: classify a state, choose among tools, score risk or quality, decide whether to continue, retry, ask, or stop, route an uncertain case to review, or verify an output against a rubric. Zo can package that narrow question and its relevant state, outsource the judgment to Jev, and use the typed result to guide the rest of the work.
+
+This skill exists to make that practice normal and reusable across domains, not just for scripting. The user does not need to know Jev exists or name it; Zo should recognize when a small, structured decision is worth delegating and keep the delegation internal. The included evaluator demonstrates the pattern for choosing a scripting path, while the same pattern applies to triage, routing, prioritization, retry policy, quality checks, and other bounded decisions.
+
+Jev is a specialized decision delegate, not a replacement for Zo. It does not inspect files, implement solutions, run commands, grant permission, or own the final decision. Zo remains responsible for context gathering, implementation, authorization, side-effect control, and verification.
 
 ## User-facing behavior
 
-The user does not need to know Jev exists or mention it by name. Invoke this skill based on the shape of the work: repeated or data-heavy tasks, custom transformations, uncertain script reuse, or a meaningful choice between inspecting, writing, running, or asking. Keep Jev as an internal decision step unless explaining the choice would help the user.
+The user does not need to know Jev exists or mention it by name. Invoke this skill when the work contains a bounded judgment that can be separated from execution: repeated or data-heavy tasks, custom transformations, uncertain tool or script selection, routing, triage, retry/continue/stop decisions, scoring, validation, or review thresholds. Keep Jev as an internal decision step unless explaining the choice would help the user.
 
-Jev outsources a narrow judgment call to a fast typed model; it does not outsource implementation. Zo remains responsible for reading the actual files, writing the custom script, running only authorized commands, and verifying the result.
+Jev outsources a narrow judgment call to a fast typed model; it does not outsource the whole problem. Zo remains responsible for reading the actual files, writing custom scripts when needed, running only authorized commands, and verifying the result.
 
 ## When to use this skill
 
-Call this skill when the correct scripting path is genuinely unclear, when a request spans many files or repeated transformations, when an existing script may be reusable, or when execution risk and external side effects need a structured check. Do not call it for every simple explanation or tiny deterministic edit; use a direct answer or ordinary file tools instead.
+Call this skill when a structured Jev judgment can reduce uncertainty or make a recurring decision consistent. Examples include choosing a tool, script, or subagent; deciding whether to continue, retry, ask, or stop; ranking or routing work; scoring risk, urgency, repeatability, or quality; checking an output against a rubric; and deciding whether an uncertain case should go to review. Do not call it for every simple explanation or obvious deterministic action; use normal reasoning and tools when Jev would add more overhead than value.
 
-Use Jev as a typed planning signal, not as an authorization system. The local policy always protects private data and requires explicit authorization for publishing, sending, deleting, financial actions, or other irreversible changes.
+Use Jev as typed evidence, not as an authorization system. The local policy always protects private data and requires explicit authorization for publishing, sending, deleting, financial actions, or other irreversible changes.
+
+## General Jev delegation loop
+
+When a problem has a bounded judgment worth outsourcing:
+
+1. Isolate the judgment from the larger task; do not delegate the entire problem by default.
+2. Gather the relevant state and constraints from the actual files, request, or tool results.
+3. Formulate a small set of typed questions with explicit choices, score levels, or Boolean criteria.
+4. Ask Jev through the current AI SDK and Vercel AI Gateway integration.
+5. Treat the answers and probabilities as evidence; apply deterministic local thresholds and safety rules.
+6. Continue the work in Zo, or delegate an independently scoped implementation task through `zocomputer-subagent` when that is separately justified.
+7. Verify the outcome and route ambiguous or low-confidence cases to review instead of pretending certainty.
+
+Never send secrets or unnecessary private content to Jev. Minimize the state, redact sensitive values, and do not let a Jev answer authorize an irreversible action.
 
 ## Decision loop
 
@@ -65,7 +83,7 @@ The script should be customized to the user's actual files and goal. Prefer an e
 
 ## Relationship to subagent delegation
 
-`zocomputer-jev` and `zocomputer-subagent` solve different problems. Jev supplies a typed judgment about whether and how to automate; `zocomputer-subagent` delegates approved, independent implementation or research tasks to child Zo agents. They can be composed: use Jev to choose or validate the path, then use bounded subagent fan-out when the work is genuinely independent. Jev itself must not receive secrets, authorize irreversible actions, or recursively spawn agents.
+`zocomputer-jev` and `zocomputer-subagent` delegate at different levels. Jev delegates a narrow, typed judgment to a specialized decision model; `zocomputer-subagent` delegates an approved, independently scoped implementation or research task to a child Zo agent. Use Jev when the missing piece is a choice, score, classification, routing decision, or verification signal. Use a subagent when the missing piece is substantial work that another agent can perform. They can be composed: Jev can choose or validate the path before or after bounded subagent work, but Jev itself must not recursively spawn agents.
 
 ## Credential setup
 

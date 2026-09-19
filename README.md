@@ -1,6 +1,6 @@
 # zocomputer-jev
 
-A Zo skill for choosing the right level of scripting for a request: answer directly, inspect an existing script, write a focused script, run an inspected script, or ask for clarification. It uses TypeSafe AI Jev through the Vercel AI Gateway's AI SDK integration, while keeping authorization and safety decisions deterministic.
+A Zo skill for outsourcing bounded, typed situational judgments to TypeSafe AI Jev through Vercel AI Gateway. Jev can help Zo classify, route, score, verify, and choose among tools, scripts, subagents, retries, or review paths; Zo retains implementation, authorization, and verification.
 
 ## Setup
 
@@ -34,9 +34,11 @@ The local policy converts those answers into an action. It fails closed to `ask_
 
 ## How Zo uses it
 
-The user does not need to know Jev exists. Zo invokes it internally when a task is repeated, data-heavy, custom, or ambiguous enough that choosing between answering, inspecting, writing, running, or asking deserves evidence. Jev makes the typed judgment; Zo still inspects the real files, writes the task-specific script, obtains authorization, runs it safely, and verifies the result.
+The user does not need to know Jev exists. Zo invokes it internally whenever a small, structured judgment can reduce uncertainty or make a recurring decision consistent: triage, routing, prioritization, risk or quality scoring, continue/retry/ask/stop decisions, output verification, or choosing the right automation path.
 
-When the action is `write_script`, Zo creates the smallest useful custom script for the user's actual files and goal rather than blindly running a generic helper. This repository can also compose with `zocomputer-subagent`: Jev chooses or validates the automation path, while bounded child Zo agents handle independent implementation or research work. Neither Jev nor a child agent is allowed to authorize irreversible side effects.
+Jev is a specialized decision delegate, not a general-purpose coding or execution agent. Zo gathers the relevant state, asks Jev typed questions, treats the answers and probabilities as evidence, applies local safety thresholds, and continues the work. When the result is `write_script`, Zo creates the smallest useful custom script for the user's actual files and goal. When substantial independent implementation or research is needed, Zo can separately compose this skill with `zocomputer-subagent`.
+
+The included evaluator is a concrete implementation for situational script decisions; the delegation pattern is intentionally broader than scripting.
 
 ## Development
 
