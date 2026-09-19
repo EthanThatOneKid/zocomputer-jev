@@ -10,9 +10,9 @@ The matching rule is installed in Zo's Rules settings. Keep `rule.md` synchroniz
 
 ## Rule behavior
 
-The rule applies when a task contains a bounded judgment that could benefit from typed evidence: classification, routing, prioritization, retry/continue/ask/stop behavior, risk, quality, verification, or choosing a tool, script, or subagent.
+The rule applies when a task contains a bounded judgment that could benefit from typed evidence: classification, routing, prioritization, retry/continue/ask/stop behavior, risk, quality, verification, or choosing a tool or script.
 
-Zo should use the official TypeSafe AI skill to formulate a minimal, redacted question for Jev, treat Jev's typed answers and probabilities as evidence, and keep implementation, authorization, side-effect control, and verification local to Zo. The user does not need to know Jev exists. For substantial independent work, Zo can compose Jev's decision step with `zocomputer-subagent`.
+Zo should use the official TypeSafe AI skill to formulate a minimal, redacted question for Jev, treat Jev's typed answers and probabilities as evidence, and keep implementation, authorization, side-effect control, and verification local to Zo. The user does not need to know Jev exists.
 
 The rule is not for obvious deterministic work when Jev would add overhead. Jev must not authorize secrets, irreversible actions, external communications, financial actions, or recursive delegation.
 
