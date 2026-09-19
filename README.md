@@ -1,60 +1,23 @@
 # zocomputer-jev
 
-A Zo skill for outsourcing bounded, typed situational judgments to TypeSafe AI Jev through Vercel AI Gateway. Jev can help Zo classify, route, score, verify, and choose among tools, scripts, subagents, retries, or review paths; Zo retains implementation, authorization, and verification.
+A versioned Zo Rule for using TypeSafe AI Jev as an internal decision delegate. This repository intentionally does not duplicate Jev's skill, SDK integration, or evaluator: Zo should use the official TypeSafe skill and current TypeSafe documentation.
 
-The tracked Zo Rule lives in `rule.md`. Keep that file as the versioned source of truth for the live rule installed in Zo's Rules settings; never put an API key or other secret in it.
+## What it contains
 
-## Setup
+- `rule.md` — the versioned source of truth for the live Zo Rule.
 
-1. Create a Vercel AI Gateway API key.
-2. Store it in Zo's [Settings > Advanced](/?t=settings&s=advanced) Secrets area as `AI_GATEWAY_API_KEY`, or export that variable for local development.
-3. Install dependencies:
+The matching rule is installed in Zo's Rules settings. Keep `rule.md` synchronized with that live rule. Never put API keys or other secrets in this repository.
 
-   ```sh
-   bun install
-   ```
+## Rule behavior
 
-The key is read from the environment by `@ai-sdk/gateway`; it is never committed or passed as a command-line argument.
+The rule applies when a task contains a bounded judgment that could benefit from typed evidence: classification, routing, prioritization, retry/continue/ask/stop behavior, risk, quality, verification, or choosing a tool, script, or subagent.
 
-## Use
+Zo should use the official TypeSafe AI skill to formulate a minimal, redacted question for Jev, treat Jev's typed answers and probabilities as evidence, and keep implementation, authorization, side-effect control, and verification local to Zo. The user does not need to know Jev exists. For substantial independent work, Zo can compose Jev's decision step with `zocomputer-subagent`.
 
-```sh
-bun run scripts/jev-evaluate.ts \\
-  --request "Turn these meeting transcripts into structured notes" \\
-  --context "Local files only; produce Markdown artifacts; do not send anything" \\
-  --json
-```
+The rule is not for obvious deterministic work when Jev would add overhead. Jev must not authorize secrets, irreversible actions, external communications, financial actions, or recursive delegation.
 
-The evaluator asks Jev four typed questions:
+## Official source
 
-- the safest useful next action;
-- whether the action has an external side effect;
-- how much scripting improves repeatability; and
-- how risky execution is without another confirmation.
-
-The local policy converts those answers into an action. It fails closed to `ask_clarification` when the request is likely external or irreversible, risk is high, or Jev returns an unknown action. Jev's recommendation never replaces explicit authorization.
-
-## How Zo uses it
-
-The user does not need to know Jev exists. Zo invokes it internally whenever a small, structured judgment can reduce uncertainty or make a recurring decision consistent: triage, routing, prioritization, risk or quality scoring, continue/retry/ask/stop decisions, output verification, or choosing the right automation path.
-
-Jev is a specialized decision delegate, not a general-purpose coding or execution agent. Zo gathers the relevant state, asks Jev typed questions, treats the answers and probabilities as evidence, applies local safety thresholds, and continues the work. When the result is `write_script`, Zo creates the smallest useful custom script for the user's actual files and goal. When substantial independent implementation or research is needed, Zo can separately compose this skill with `zocomputer-subagent`.
-
-The included evaluator is a concrete implementation for situational script decisions; the delegation pattern is intentionally broader than scripting.
-
-## Development
-
-```sh
-bun test
-```
-
-The tests cover the decision policy without making a Gateway request. Live evaluation requires a valid `AI_GATEWAY_API_KEY` and may incur Gateway usage.
-
-## References
-
-- [TypeSafe AI Jev on AI Gateway](https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway)
-- [Jev model page](https://vercel.com/ai-gateway/models/jev)
-- [AI SDK evaluation](https://ai-sdk.dev/docs/ai-sdk-core/evaluation)
-- [AI SDK with AI Gateway](https://vercel.com/docs/ai-gateway/sdks-and-apis/ai-sdk)
-- [AI Gateway API keys](https://vercel.com/docs/ai-gateway/authentication-and-byok/api-keys)
-- [AI Gateway evaluation](https://vercel.com/docs/ai-gateway/modalities/evaluation)
+- [TypeSafe AI agent skill](https://docs.typesafe.ai/agent-skill)
+- [TypeSafe AI documentation](https://docs.typesafe.ai/)
+- [Jev on Vercel AI Gateway](https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway)
