@@ -80,3 +80,16 @@ bun test
 ```
 
 The evaluator accepts a request and optional context, then returns the typed Jev answers, a normalized action, risk and side-effect estimates, and token usage. The normalized policy fails closed to `ask_clarification` for unknown actions, high risk, or likely external side effects.
+
+## Documentation freshness
+
+Before changing this skill, the evaluator, or any AI SDK/AI Gateway integration, consult the latest official documentation rather than relying on memory, old snippets, or search-result summaries. Check the current AI SDK evaluation API, the AI SDK AI Gateway provider guidance, the Vercel AI Gateway evaluation documentation, and the current Jev model page. Confirm model IDs, experimental API names, supported question types, authentication variables, result shapes, and version requirements against the installed packages and official examples.
+
+Use the current documented model identifier and API shape; do not assume that an older alias or import remains valid. If the documentation and installed package disagree, inspect the installed type definitions, resolve the version mismatch deliberately, and run a small dry-run or authorized live smoke test before changing behavior. Do not put API keys in prompts, source files, command arguments, or documentation.
+
+Official references:
+
+- [AI SDK evaluation](https://ai-sdk.dev/docs/ai-sdk-core/evaluation)
+- [AI SDK with AI Gateway](https://vercel.com/docs/ai-gateway/sdks-and-apis/ai-sdk)
+- [Vercel AI Gateway evaluation](https://vercel.com/docs/ai-gateway/modalities/evaluation)
+- [Jev model page](https://vercel.com/ai-gateway/models/jev)

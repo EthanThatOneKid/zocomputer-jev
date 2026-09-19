@@ -49,6 +49,8 @@ The tests cover the decision policy without making a Gateway request. Live evalu
 ## References
 
 - [TypeSafe AI Jev on AI Gateway](https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway)
+- [Jev model page](https://vercel.com/ai-gateway/models/jev)
+- [AI SDK evaluation](https://ai-sdk.dev/docs/ai-sdk-core/evaluation)
+- [AI SDK with AI Gateway](https://vercel.com/docs/ai-gateway/sdks-and-apis/ai-sdk)
 - [AI Gateway API keys](https://vercel.com/docs/ai-gateway/authentication-and-byok/api-keys)
 - [AI Gateway evaluation](https://vercel.com/docs/ai-gateway/modalities/evaluation)
-- [AI SDK Gateway provider](https://ai-sdk.dev/providers/ai-sdk-providers/vercel-gateway)
