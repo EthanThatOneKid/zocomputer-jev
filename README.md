@@ -2,6 +2,8 @@
 
 A Zo skill for outsourcing bounded, typed situational judgments to TypeSafe AI Jev through Vercel AI Gateway. Jev can help Zo classify, route, score, verify, and choose among tools, scripts, subagents, retries, or review paths; Zo retains implementation, authorization, and verification.
 
+The tracked Zo Rule lives in `rule.md`. Keep that file as the versioned source of truth for the live rule installed in Zo's Rules settings; never put an API key or other secret in it.
+
 ## Setup
 
 1. Create a Vercel AI Gateway API key.
