@@ -32,6 +32,12 @@ The evaluator asks Jev four typed questions:
 
 The local policy converts those answers into an action. It fails closed to `ask_clarification` when the request is likely external or irreversible, risk is high, or Jev returns an unknown action. Jev's recommendation never replaces explicit authorization.
 
+## How Zo uses it
+
+The user does not need to know Jev exists. Zo invokes it internally when a task is repeated, data-heavy, custom, or ambiguous enough that choosing between answering, inspecting, writing, running, or asking deserves evidence. Jev makes the typed judgment; Zo still inspects the real files, writes the task-specific script, obtains authorization, runs it safely, and verifies the result.
+
+When the action is `write_script`, Zo creates the smallest useful custom script for the user's actual files and goal rather than blindly running a generic helper. This repository can also compose with `zocomputer-subagent`: Jev chooses or validates the automation path, while bounded child Zo agents handle independent implementation or research work. Neither Jev nor a child agent is allowed to authorize irreversible side effects.
+
 ## Development
 
 ```sh

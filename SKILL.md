@@ -24,6 +24,12 @@ Jev is not a general-purpose coding model, a filesystem inspector, an execution 
 
 Zo often needs to choose the right level of automation before touching files: answer directly, inspect an existing script, write a new script, or run an authorized one. This skill makes that choice explicit and repeatable, uses Jev for typed situational evidence, and keeps the final safety and authorization decision local to Zo.
 
+## User-facing behavior
+
+The user does not need to know Jev exists or mention it by name. Invoke this skill based on the shape of the work: repeated or data-heavy tasks, custom transformations, uncertain script reuse, or a meaningful choice between inspecting, writing, running, or asking. Keep Jev as an internal decision step unless explaining the choice would help the user.
+
+Jev outsources a narrow judgment call to a fast typed model; it does not outsource implementation. Zo remains responsible for reading the actual files, writing the custom script, running only authorized commands, and verifying the result.
+
 ## When to use this skill
 
 Call this skill when the correct scripting path is genuinely unclear, when a request spans many files or repeated transformations, when an existing script may be reusable, or when execution risk and external side effects need a structured check. Do not call it for every simple explanation or tiny deterministic edit; use a direct answer or ordinary file tools instead.
@@ -44,6 +50,22 @@ Use Jev as a typed planning signal, not as an authorization system. The local po
 5. Verify the result, report changed files and failures, and keep generated artifacts in the user's workspace when they are meant for the user.
 
 Prefer a script when the task involves repeated work, many files or rows, deterministic transformations, validation, parsing, or a durable workflow. Prefer a direct answer for explanation-only requests and tiny one-off changes. Start with a dry run or read-only inspection when a script touches private data, external services, or a broad file set.
+
+## Writing custom scripts situationally
+
+When Jev returns `write_script`, do not reach for a generic script automatically. Zo should:
+
+1. inspect the relevant files, formats, existing commands, and project guidance;
+2. define the smallest useful input/output contract for this request;
+3. write a focused script in the appropriate project or workspace location;
+4. make it reviewable and safe by default, with bounded inputs and a dry-run or read-only mode when practical;
+5. test it, show or inspect the planned changes, and run it only when the user has authorized execution.
+
+The script should be customized to the user's actual files and goal. Prefer an existing project convention when one exists, and promote a one-off script into a reusable tool only when the workflow is likely to recur. Report the script path, what it changed, and any verification results.
+
+## Relationship to subagent delegation
+
+`zocomputer-jev` and `zocomputer-subagent` solve different problems. Jev supplies a typed judgment about whether and how to automate; `zocomputer-subagent` delegates approved, independent implementation or research tasks to child Zo agents. They can be composed: use Jev to choose or validate the path, then use bounded subagent fan-out when the work is genuinely independent. Jev itself must not receive secrets, authorize irreversible actions, or recursively spawn agents.
 
 ## Credential setup
 
