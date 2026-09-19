@@ -8,6 +8,26 @@ metadata:
 
 # Situational script work with Jev
 
+## What Jev is good at
+
+Jev is TypeSafe AI's probabilistic decision model for software. Through Vercel AI Gateway, the `typesafe-ai/jev` evaluation model evaluates one shared state against several typed questions and returns structured `Choice`, `Score`, and `Boolean` answers with probabilities. It is useful for fast, repeatable judgments such as:
+
+- choosing the next tool, script, or subagent in an agent loop;
+- deciding whether to continue, retry, ask, or stop;
+- scoring repeatability, urgency, risk, or confidence;
+- routing uncertain cases to review; and
+- checking outputs against simple guardrails.
+
+Jev is not a general-purpose coding model, a filesystem inspector, an execution engine, or an authorization system. Do not ask it to write the implementation, infer permissions, approve an irreversible action, or replace inspection of the actual files. Use Zo's normal reasoning and tools for those jobs.
+
+## Why this skill exists
+
+Zo often needs to choose the right level of automation before touching files: answer directly, inspect an existing script, write a new script, or run an authorized one. This skill makes that choice explicit and repeatable, uses Jev for typed situational evidence, and keeps the final safety and authorization decision local to Zo.
+
+## When to use this skill
+
+Call this skill when the correct scripting path is genuinely unclear, when a request spans many files or repeated transformations, when an existing script may be reusable, or when execution risk and external side effects need a structured check. Do not call it for every simple explanation or tiny deterministic edit; use a direct answer or ordinary file tools instead.
+
 Use Jev as a typed planning signal, not as an authorization system. The local policy always protects private data and requires explicit authorization for publishing, sending, deleting, financial actions, or other irreversible changes.
 
 ## Decision loop
