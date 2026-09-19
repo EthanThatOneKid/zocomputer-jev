@@ -1,0 +1,20 @@
+{
+  "name": "zocomputer-jev",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A Zo skill for situational script writing and execution using Vercel AI Gateway and TypeSafe AI Jev.",
+  "scripts": {
+    "jev": "bun run scripts/jev-evaluate.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit --moduleResolution bundler --module esnext --target es2022 --skipLibCheck --types bun scripts/jev-evaluate.ts scripts/jev-evaluate.test.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/gateway": "^4.0.87",
+    "ai": "^7.0.107"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "typescript": "^7.0.2"
+  }
+}
